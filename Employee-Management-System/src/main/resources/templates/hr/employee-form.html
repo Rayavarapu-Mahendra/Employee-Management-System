@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html xmlns:th="[thymeleaf.org](http://www.thymeleaf.org)">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Form - EMS</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <div class="wrapper">
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <h2>EMS</h2>
+            </div>
+            <div class="sidebar-nav">
+                <a th:href="@{/dashboard}">Dashboard</a>
+                <a th:href="@{/hr/employees}" class="active">Manage Employees</a>
+                <a th:href="@{/logout}">Logout</a>
+            </div>
+        </nav>
+
+        <main class="main-content">
+            <div class="header">
+                <h1 th:text="${employeeDTO.id != null ? 'Edit Employee' : 'Add New Employee'}">Employee Form</h1>
+            </div>
+
+            <div class="card">
+                <div class="card-body">
+                    <form th:action="@{/hr/employees/save}" th:object="${employeeDTO}" method="post">
+                        <input type="hidden" th:field="*{id}">
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="firstName">First Name *</label>
+                                <input type="text" id="firstName" th:field="*{firstName}" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="lastName">Last Name *</label>
+                                <input type="text" id="lastName" th:field="*{lastName}" class="form-control" required>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="email">Email *</label>
+                                <input type="email" id="email" th:field="*{email}" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="phone">Phone</label>
+                                <input type="text" id="phone" th:field="*{phone}" class="form-control" 
+                                       pattern="[0-9]{10}" title="10 digit phone number">
+                            </div>
+                        </div>
+
+                        <div class="form-group" th:if="${employeeDTO.id == null}">
+                            <label for="password">Password *</label>
+                            <input type="password" id="password" th:field="*{password}" class="form-control" 
+                                   required minlength="6">
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="departmentId">Department</label>
+                                <select id="departmentId" th:field="*{departmentId}" class="form-control">
+                                    <option value="">Select Department</option>
+                                    <option th:each="dept : ${departments}" 
+                                            th:value="${dept.id}" 
+                                            th:text="${dept.name}">Dept</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="designation">Designation</label>
+                                <input type="text" id="designation" th:field="*{designation}" class="form-control">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="salary">Salary</label>
+                                <input type="number" id="salary" th:field="*{salary}" class="form-control" step="0.01">
+                            </div>
+                            <div class="form-group">
+                                <label for="joiningDate">Joining Date</label>
+                                <input type="date" id="joiningDate" th:field="*{joiningDate}" class="form-control">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="address">Address</label>
+                            <textarea id="address" th:field="*{address}" class="form-control" rows="3"></textarea>
+                        </div>
+
+                        <div class="form-group" th:if="${employeeDTO.id == null}">
+                            <label for="role">Role</label>
+                            <select id="role" th:field="*{role}" class="form-control">
+                                <option th:each="r : ${roles}" th:value="${r.name()}" th:text="${r.name()}">Role</option>
+                            </select>
+                        </div>
+
+                        <div class="actions">
+                            <button type="submit" class="btn btn-primary">Save Employee</button>
+                            <a th:href="@{/hr/employees}" class="btn btn-secondary">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

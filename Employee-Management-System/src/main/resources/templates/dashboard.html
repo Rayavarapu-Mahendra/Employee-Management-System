@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html xmlns:th="[thymeleaf.org](http://www.thymeleaf.org)" 
+      xmlns:sec="[thymeleaf.org](http://www.thymeleaf.org/extras/spring-security)">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - EMS</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <div class="wrapper">
+        <!-- Sidebar -->
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <h2>EMS</h2>
+            </div>
+            <div class="sidebar-nav">
+                <a th:href="@{/dashboard}" class="active">Dashboard</a>
+                
+                <!-- Admin Menu -->
+                <div sec:authorize="hasRole('ADMIN')">
+                    <a th:href="@{/admin/users}">Manage Users</a>
+                    <a th:href="@{/admin/departments}">Manage Departments</a>
+                    <a th:href="@{/hr/employees}">Manage Employees</a>
+                </div>
+                
+                <!-- HR Menu -->
+                <div sec:authorize="hasRole('HR') and !hasRole('ADMIN')">
+                    <a th:href="@{/hr/employees}">Manage Employees</a>
+                </div>
+                
+                <!-- Employee Menu -->
+                <div sec:authorize="hasRole('EMPLOYEE')">
+                    <a th:href="@{/employee/profile}">My Profile</a>
+                </div>
+                
+                <a th:href="@{/logout}">Logout</a>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="header">
+                <h1>Dashboard</h1>
+                <div class="user-info">
+                    <span th:text="${user.email}">user@email.com</span>
+                    <span class="badge badge-primary" th:text="${role}">ROLE</span>
+                </div>
+            </div>
+
+            <div th:if="${message}" class="alert alert-success" th:text="${message}"></div>
+
+            <!-- Welcome Card -->
+            <div class="card">
+                <div class="card-body">
+                    <h2>Welcome, <span th:text="${employee != null ? employee.firstName : user.email}">User</span>!</h2>
+                    <p>Role: <strong th:text="${role}">Role</strong></p>
+                </div>
+            </div>
+
+            <!-- Admin Stats -->
+            <div sec:authorize="hasRole('ADMIN')" class="stats-grid">
+                <div class="stat-card">
+                    <h3>Quick Links</h3>
+                    <p>
+                        <a th:href="@{/admin/users}" class="btn btn-primary btn-sm">Manage Users</a>
+                        <a th:href="@{/admin/departments}" class="btn btn-secondary btn-sm">Departments</a>
+                        <a th:href="@{/hr/employees}" class="btn btn-success btn-sm">Employees</a>
+                    </p>
+                </div>
+            </div>
+
+            <!-- HR Quick Actions -->
+            <div sec:authorize="hasRole('HR') and !hasRole('ADMIN')" class="stats-grid">
+                <div class="stat-card">
+                    <h3>HR Actions</h3>
+                    <p>
+                        <a th:href="@{/hr/employees}" class="btn btn-primary btn-sm">View Employees</a>
+                        <a th:href="@{/hr/employees/new}" class="btn btn-success btn-sm">Add Employee</a>
+                    </p>
+                </div>
+            </div>
+
+            <!-- Employee Profile Card -->
+            <div sec:authorize="hasRole('EMPLOYEE') and !hasRole('HR') and !hasRole('ADMIN')">
+                <div class="card" th:if="${employee != null}">
+                    <div class="card-header">
+                        <h3>My Profile Summary</h3>
+                        <a th:href="@{/employee/profile}" class="btn btn-primary btn-sm">View Full Profile</a>
+                    </div>
+                    <div class="card-body">
+                        <div class="profile-details">
+                            <div class="profile-item">
+                                <label>Name</label>
+                                <span th:text="${employee.fullName}">Name</span>
+                            </div>
+                            <div class="profile-item">
+                                <label>Department</label>
+                                <span th:text="${employee.department != null ? employee.department.name : 'Not Assigned'}">Dept</span>
+                            </div>
+                            <div class="profile-item">
+                                <label>Designation</label>
+                                <span th:text="${employee.designation ?: 'Not Set'}">Designation</span>
+                            </div>
+                            <div class="profile-item">
+                                <label>Email</label>
+                                <span th:text="${user.email}">Email</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

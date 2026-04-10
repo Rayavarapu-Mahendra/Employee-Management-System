@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="[thymeleaf.org](http://www.thymeleaf.org)">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile - EMS</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <div class="wrapper">
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <h2>EMS</h2>
+            </div>
+            <div class="sidebar-nav">
+                <a th:href="@{/dashboard}">Dashboard</a>
+                <a th:href="@{/employee/profile}" class="active">My Profile</a>
+                <a th:href="@{/employee/change-password}">Change Password</a>
+                <a th:href="@{/logout}">Logout</a>
+            </div>
+        </nav>
+
+        <main class="main-content">
+            <div class="header">
+                <h1>My Profile</h1>
+                <a th:href="@{/employee/profile/edit}" class="btn btn-primary">Edit Profile</a>
+            </div>
+
+            <div th:if="${message}" class="alert alert-success" th:text="${message}"></div>
+            <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+
+            <div class="card">
+                <div class="card-body">
+                    <div class="profile-header">
+                        <div class="profile-avatar" th:text="${employee.firstName.charAt(0)}">J</div>
+                        <div class="profile-info">
+                            <h2 th:text="${employee.fullName}">Employee Name</h2>
+                            <p th:text="${employee.designation ?: 'Employee'}">Designation</p>
+                        </div>
+                    </div>
+
+                    <div class="profile-details">
+                        <div class="profile-item">
+                            <label>Email</label>
+                            <span th:text="${employee.user.email}">email</span>
+                        </div>
+                        <div class="profile-item">
+                            <label>Phone</label>
+                            <span th:text="${employee.phone ?: 'Not Provided'}">phone</span>
+                        </div>
+                        <div class="profile-item">
+                            <label>Department</label>
+                            <span th:text="${employee.department != null ? employee.department.name : 'Not Assigned'}">dept</span>
+                        </div>
+                        <div class="profile-item">
+                            <label>Joining Date</label>
+                            <span th:text="${employee.joiningDate != null ? employee.joiningDate : 'Not Set'}">date</span>
+                        </div>
+                        <div class="profile-item">
+                            <label>Address</label>
+                            <span th:text="${employee.address ?: 'Not Provided'}">address</span>
+                        </div>
+                        <div class="profile-item">
+                            <label>Role</label>
+                            <span class="badge badge-primary" th:text="${employee.user.role}">ROLE</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

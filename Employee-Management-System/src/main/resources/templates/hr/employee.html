@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html xmlns:th="[thymeleaf.org](http://www.thymeleaf.org)" 
+      xmlns:sec="[thymeleaf.org](http://www.thymeleaf.org/extras/spring-security)">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employees - EMS</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <div class="wrapper">
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <h2>EMS</h2>
+            </div>
+            <div class="sidebar-nav">
+                <a th:href="@{/dashboard}">Dashboard</a>
+                <div sec:authorize="hasRole('ADMIN')">
+                    <a th:href="@{/admin/users}">Manage Users</a>
+                    <a th:href="@{/admin/departments}">Manage Departments</a>
+                </div>
+                <a th:href="@{/hr/employees}" class="active">Manage Employees</a>
+                <a th:href="@{/logout}">Logout</a>
+            </div>
+        </nav>
+
+        <main class="main-content">
+            <div class="header">
+                <h1>Employees</h1>
+                <a th:href="@{/hr/employees/new}" class="btn btn-primary">Add Employee</a>
+            </div>
+
+            <div th:if="${message}" class="alert alert-success" th:text="${message}"></div>
+            <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+
+            <!-- Search -->
+            <form th:action="@{/hr/employees}" method="get" class="search-box">
+                <input type="text" name="search" class="form-control" 
+                       placeholder="Search by name..." th:value="${search}">
+                <button type="submit" class="btn btn-primary">Search</button>
+                <a th:href="@{/hr/employees}" class="btn btn-secondary">Clear</a>
+            </form>
+
+            <div class="card">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Department</th>
+                                    <th>Designation</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="emp : ${employees}">
+                                    <td th:text="${emp.id}">1</td>
+                                    <td th:text="${emp.fullName}">Name</td>
+                                    <td th:text="${emp.user != null ? emp.user.email : 'N/A'}">email</td>
+                                    <td th:text="${emp.department != null ? emp.department.name : 'Not Assigned'}">Dept</td>
+                                    <td th:text="${emp.designation ?: 'N/A'}">Designation</td>
+                                    <td class="actions">
+                                        <a th:href="@{/hr/employees/view/{id}(id=${emp.id})}" 
+                                           class="btn btn-primary btn-sm">View</a>
+                                        <a th:href="@{/hr/employees/edit/{id}(id=${emp.id})}" 
+                                           class="btn btn-warning btn-sm">Edit</a>
+                                        <a th:href="@{/hr/employees/delete/{id}(id=${emp.id})}" 
+                                           class="btn btn-danger btn-sm"
+                                           onclick="return confirm('Are you sure?')">Delete</a>
+                                    </td>
+                                </tr>
+                                <tr th:if="${#lists.isEmpty(employees)}">
+                                    <td colspan="6" style="text-align: center;">No employees found</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

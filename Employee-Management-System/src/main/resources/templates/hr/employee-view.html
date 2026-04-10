@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="[thymeleaf.org](http://www.thymeleaf.org)">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Employee - EMS</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <div class="wrapper">
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <h2>EMS</h2>
+            </div>
+            <div class="sidebar-nav">
+                <a th:href="@{/dashboard}">Dashboard</a>
+                <a th:href="@{/hr/employees}" class="active">Manage Employees</a>
+                <a th:href="@{/logout}">Logout</a>
+            </div>
+        </nav>
+
+        <main class="main-content">
+            <div class="header">
+                <h1>Employee Details</h1>
+                <div class="actions">
+                    <a th:href="@{/hr/employees/edit/{id}(id=${employee.id})}" class="btn btn-warning">Edit</a>
+                    <a th:href="@{/hr/employees}" class="btn btn-secondary">Back</a>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-body">
+                    <div class="profile-header">
+                        <div class="profile-avatar" th:text="${employee.firstName.charAt(0)}">J</div>
+                        <div class="profile-info">
+                            <h2 th:text="${employee.fullName}">Employee Name</h2>
+                            <p th:text="${employee.designation ?: 'No Designation'}">Designation</p>
+                        </div>
+                    </div>
+
+                    <div class="profile-details">
+                        <div class="profile-item">
+                            <label>Email</label>
+                            <span th:text="${employee.user != null ? employee.user.email : 'N/A'}">email</span>
+                        </div>
+                        <div class="profile-item">
+                            <label>Phone</label>
+                            <span th:text="${employee.phone ?: 'Not Provided'}">phone</span>
+                        </div>
+                        <div class="profile-item">
+                            <label>Department</label>
+                            <span th:text="${employee.department != null ? employee.department.name : 'Not Assigned'}">dept</span>
+                        </div>
+                        <div class="profile-item">
+                            <label>Joining Date</label>
+                            <span th:text="${employee.joiningDate != null ? employee.joiningDate : 'Not Set'}">date</span>
+                        </div>
+                        <div class="profile-item">
+                            <label>Salary</label>
+                            <span th:text="${employee.salary != null ? '$' + employee.salary : 'Not Set'}">salary</span>
+                        </div>
+                        <div class="profile-item">
+                            <label>Address</label>
+                            <span th:text="${employee.address ?: 'Not Provided'}">address</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+</html>
