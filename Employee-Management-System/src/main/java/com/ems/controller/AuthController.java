@@ -23,7 +23,7 @@ public class AuthController {
         this.employeeService = employeeService;
     }
 
-    @GetMapping("/login")
+    @GetMapping(value={"/login" , "", "/"})
     public String loginPage() {
         return "login";
     }
